@@ -1,0 +1,11 @@
+node_modules/**/*
+.expo/*
+npm-debug.*
+*.p8
+*.key
+*.orig.*
+web-build/
+
+# macOS
+.DS_Store
+package-lock.json

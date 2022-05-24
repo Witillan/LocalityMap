@@ -1,0 +1,1 @@
+Mostrando ID de dispositivo no momento da liberação

@@ -1,0 +1,11 @@
+{
+  "displayName": "LocalityMap",
+  "expo": {
+    "name": "LocalityMap",
+    "slug": "LocalityMap",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
