@@ -1,11 +1,31 @@
 {
-  "displayName": "LocalityMap",
   "expo": {
     "name": "LocalityMap",
     "slug": "LocalityMap",
     "version": "1.0.0",
+    "icon": "./assets/Logo.png",
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#FFFFFF"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "ios": {
+      "supportsTablet": true,
+      "userInterfaceStyle": "automatic",
+      "buildNumber": "1.0.0"
+    },
+    "android": {
+      "userInterfaceStyle": "automatic",
+      "versionCode": 1
+    },
+    "web": {
+      "favicon": "./assets/Logo.png"
+    }
   }
 }

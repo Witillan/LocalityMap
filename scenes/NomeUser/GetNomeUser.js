@@ -1,47 +1,76 @@
-import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import React, { useCallback, useEffect, useState } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ImageBackground, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import UserDao from '../../db/User';
+import Fundo from '../../assets/FundoTelaUser.png';
+import Logo from '../../assets/MapaCirculoPNG.png';
+import Button from '../../components/Buttons/Button';
+import ModalValidation from '../../components/Modals/ModalValidation';
+import ModalError from '../../components/Modals/ModalError';
 
 export default function GetNomeUser() {
     const navigation = useNavigation()
+    const [modalValidation, setModalValidation] = useState(false)
+    const [modalError, setModalError] = useState(false)
 
     const [nomeUser, setNomeUser] = useState('');
 
-    useEffect(useCallback(() => {
-        const get = async () => {
-            const user = await UserDao.GetUser()
-            console.log(user)
+    const entrar = async () => {
+        if (nomeUser == '' || nomeUser == null || nomeUser == undefined) {
+            setModalValidation(true)
+            return
         }
-        get()
-    }, []))
+        try {
+            await AsyncStorage.setItem('@nomeusuario', nomeUser)
+            navigation.navigate('Quizzes')
+        } catch (error) {
+            setModalError(true)
+        }
+    }
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <ScrollView contentContainerStyle={styles.container}>
-                <Text style={styles.titleTest}>Sign in</Text>
-                <View style={styles.marginView}>
-                    <View>
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={setNomeUser}
-                            value={nomeUser}
-                            placeholder="Seu apelido"
-                            keyboardType="default"
+            <ImageBackground source={Fundo} style={{ flex: 1, backgroundColor: '#59D89E', justifyContent: 'center', alignItems: 'center' }}>
+                <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center' }}>
+                    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                        <ImageBackground style={{ padding: 0, width: 100, height: 100, justifyContent: 'center', alignItems: 'center' }} source={Logo}><Text style={{ padding: 0, fontSize: 80, color: 'white' }}>?</Text></ImageBackground>
+                        <Text style={styles.titleTest}>LOCALITY MAP</Text>
+                    </View>
+                    <View style={styles.marginView}>
+                        <View>
+                            <TextInput
+                                focusable={false}
+                                style={styles.input}
+                                onChangeText={setNomeUser}
+                                value={nomeUser}
+                                placeholder="Seu apelido"
+                                keyboardType="default"
+                                placeholderTextColor='white'
+                            />
+                        </View>
+                    </View>
+                    <View style={{ marginTop: 50, width: '100%', alignItems: 'center' }}>
+                        <Button
+                            color='#2B44FF'
+                            colorLabel='#FFFFFF'
+                            label='ENTRAR'
+                            onPress={entrar}
                         />
                     </View>
-                </View>
-                <View style={{ marginTop: 20, width: '100%' }}>
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={() => navigation.navigate("Contatos")}
-                    >
-                        <Text style={{ color: 'white' }}>ENTRAR</Text>
-                    </TouchableOpacity>
-                </View>
-            </ScrollView>
+                    <ModalValidation
+                        value={modalValidation}
+                        onClose={setModalValidation}
+                        title={'Ops..'}
+                        message={'Você precisa colocar um nome para continuar'}
+                    />
+                    <ModalError
+                        value={modalError}
+                        onClose={setModalError}
+                        message={'Ocorreu um erro com seu apelido, por favor feche o jogo e tente novamente mais tarde!'}
+                    />
+                </ScrollView>
+            </ImageBackground>
         </SafeAreaView>
     )
 }
@@ -49,22 +78,24 @@ export default function GetNomeUser() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        paddingHorizontal: 20
+        justifyContent: 'center'
     },
     titleTest: {
         marginLeft: 10,
-        fontSize: 15,
-        fontWeight: 'bold'
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: 'white'
     },
     input: {
         backgroundColor: 'transparent',
-        color: 'black',
+        color: 'white',
         height: 35,
         paddingHorizontal: 20,
         borderColor: 10,
-        borderWidth: 0.7,
-        borderRadius: 50
+        borderWidth: 1,
+        borderColor: '#5DA2FF',
+        borderRadius: 50,
+        width: 250
     },
     marginView: {
         paddingHorizontal: 10,
@@ -72,17 +103,5 @@ const styles = StyleSheet.create({
     },
     viewButton: {
         marginTop: 10
-    },
-    button: {
-        borderRadius: 20,
-        backgroundColor: '#2B44FF',
-        borderColor: '#1820C0',
-        '&:focus': {
-            borderColor: '#1820C0'
-        },
-        color: 'white',
-        padding: 10,
-        width: '100%',
-        alignItems: 'center'
     }
 })

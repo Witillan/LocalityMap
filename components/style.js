@@ -1,7 +1,7 @@
 import { Platform, StyleSheet, useColorScheme } from 'react-native'
 import styled from 'styled-components/native'
 
-export function useDefaultStyleSheet () {
+export function useDefaultStyleSheet() {
   const scheme = useColorScheme()
   const dark = scheme === 'dark'
 
@@ -14,6 +14,6 @@ export function useDefaultStyleSheet () {
   }
 }
 
-export const FlatList6 = styled.FlatList`
-  background-color: 'white';
+export const TextFont = styled.Text`
+  font-family: Lobster-Regular;
 `
