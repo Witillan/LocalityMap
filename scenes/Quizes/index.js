@@ -1,34 +1,24 @@
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import React, { useCallback, useState, useEffect } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, SafeAreaView, FlatList, Platform } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { FlatList, SafeAreaView, StyleSheet, Text, View, ImageBackground, TouchableOpacity } from 'react-native';
 
-// import ContatosDao from '../../db/ContatosDao';
+import Fundo from '../../assets/FundoTelaUser.png';
+import QuizzesDao from '../../db/QuizzesDao'
 
 export default function Quizzes() {
     const navigation = useNavigation()
 
     const [refreshing, setRefreshing] = useState(false)
     const [listQuizzes, setListQuizzes] = useState([])
-
-    const formatarTelefone = (v) => {
-        if (!v) {
-            return ''
-        }
-        let r = v.replace(/\D/g, '')
-        r = r.replace(/^0/, '')
-
-        if (r.length >= 11) {
-            r = r.replace(/^(\d{2})(\d)(\d{4})(\d{4}).*/, '($1) $2 $3-$4')
-        }
-        return r
-    }
+    const [modalError, setModalError] = useState(false)
 
     const Item = ({ item }) => {
         return (
-            <View style={{ padding: 20 }}>
+            <TouchableOpacity style={{ padding: 20, backgroundColor: '#DDDDDD33', borderRadius: 10 }}>
                 <Text>{item.nome || '---'}</Text>
-                <Text>{formatarTelefone(item.telefone) || '---'}</Text>
-            </View>
+                <Text>{item.descricao || '---'}</Text>
+            </TouchableOpacity>
         )
     }
 
@@ -36,42 +26,56 @@ export default function Quizzes() {
         <Item item={item} />
     )
 
-    const flatListItemSeparator = () => {
-        return (
-            <View
-                style={{
-                    height: 1,
-                    width: "100%",
-                    backgroundColor: "#000",
-                }}
-            />
-        );
-    }
+    useEffect(() => {
+        let inseriu = 'false'
+        const inserir = async () => {
+            inseriu = await AsyncStorage.getItem('@insertQuizz')
+        }
+        inserir()
+
+        if (!inseriu || inseriu != 'true') {
+            const get = async () => {
+                await AsyncStorage.setItem('@insertQuizz', 'true')
+            }
+            get()
+
+            const insertQuizzes = async () => {
+                await QuizzesDao.Insert({
+                    id: 0,
+                    numQuizz: 1,
+                    nome: "Quizz Cidades",
+                    descricao: "Neste quizz você precisa descobrir quais são as cidades pertencentes ao estado escolhido."
+                })
+                    .catch((e) => alert(e))
+            }
+            insertQuizzes()
+        }
+
+        const getQuizzes = async () => {
+            await QuizzesDao.GetQuizzes()
+                .then((e) => setListQuizzes(e))
+                .catch((e) => alert(e))
+        }
+        getQuizzes()
+    }, [])
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <Text style={styles.titleTest}>Quizzes</Text>
-            <FlatList
-                refreshing={refreshing}
-                data={listQuizzes}
-                renderItem={renderItem}
-                ItemSeparatorComponent={flatListItemSeparator}
-                keyExtractor={(item, index) => `${index}`}
-                ListEmptyComponent={() => <Text>{'Não há itens para exibir'}</Text>}
-                ListFooterComponent={() => refreshing && (
-                    <View>
-                        <Text>Carregando Quizzes...</Text>
-                    </View>
-                )}
-            />
-            <View style={{ marginTop: 20, width: '100%' }}>
-                <TouchableOpacity
-                    style={styles.button}
-                    onPress={() => navigation.navigate("NewContato")}
-                >
-                    <Text style={{ color: 'white' }}>Novo</Text>
-                </TouchableOpacity>
-            </View>
+            <ImageBackground source={Fundo} style={{ flex: 1, padding: 10 }}>
+                <Text style={styles.titleTest}>QUIZZES</Text>
+                <FlatList
+                    refreshing={refreshing}
+                    data={listQuizzes}
+                    renderItem={renderItem}
+                    keyExtractor={(item, index) => `${index}`}
+                    ListEmptyComponent={() => <Text style={{ color: 'white' }}>{'Não há Quizzes para exibir'}</Text>}
+                    ListFooterComponent={() => refreshing && (
+                        <View>
+                            <Text style={{ color: 'white' }}>Carregando Quizzes...</Text>
+                        </View>
+                    )}
+                />
+            </ImageBackground>
         </SafeAreaView>
     )
 }
@@ -84,9 +88,9 @@ const styles = StyleSheet.create({
     },
     titleTest: {
         marginTop: 30,
-        marginLeft: 10,
-        fontSize: 20,
-        fontWeight: 'bold'
+        fontSize: 30,
+        fontWeight: 'bold',
+        color: 'white',
     },
     input: {
         backgroundColor: 'transparent',

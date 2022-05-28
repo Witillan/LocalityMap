@@ -26,6 +26,15 @@ export default class Sqlite {
         nome text
       )`)
       }, reject, resolve)
+
+      db.transaction(tx => {
+        tx.executeSql(`create table if not exists Quizz (
+          id int primary key not null,
+          numQuizz int,
+          nome text,
+          descricao text
+          )`)
+      }, reject, resolve)
     })
   }
 
