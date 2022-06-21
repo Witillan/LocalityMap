@@ -11,6 +11,7 @@ import QuizzesScreen from './scenes/Quizes';
 import NavBarQuizzes from './scenes/Quizes/NavBar';
 import HomeScreen from './scenes/Home';
 import NomeUserScreen from './scenes/NomeUser/GetNomeUser';
+import JogarScreen from './scenes/Quizes/Jogar';
 // import SplashScreen from './scenes/Splash';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
@@ -18,19 +19,26 @@ import Lobster from './assets/Lobster-Regular.ttf';
 import PermanentMarker from './assets/PermanentMarker-Regular.ttf';
 
 const Stack = createNativeStackNavigator()
+export const AppContext = React.createContext({})
 
 function AppSplash() {
   const style = useDefaultStyleSheet()
+
+  const [listaCompleta, setListaCompleta] = useState([])
+
   return (
     <ThemeProvider theme={style} >
-      <NavigationContainer initialRouteName="NomeUser">
-        <Stack.Navigator>
-          <Stack.Screen name="NomeUser" component={NomeUserScreen} options={{ title: 'NomeUser', headerShown: false }} />
-          {/* <Stack.Screen name="Splash" component={SplashScreen} options={{ title: 'Splash', headerShown: false }} /> */}
-          <Stack.Screen name="Quizzes" component={QuizzesScreen} options={{ title: 'Quizzes', headerShown: false, header: () => <NavBarQuizzes /> }} />
-          <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Home', headerShown: false }} />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <AppContext.Provider value={{ listaCompleta, setListaCompleta }}>
+        <NavigationContainer initialRouteName="NomeUser">
+          <Stack.Navigator>
+            <Stack.Screen name="NomeUser" component={NomeUserScreen} options={{ title: 'NomeUser', headerShown: false }} />
+            {/* <Stack.Screen name="Splash" component={SplashScreen} options={{ title: 'Splash', headerShown: false }} /> */}
+            <Stack.Screen name="Quizzes" component={QuizzesScreen} options={{ title: 'Quizzes', headerShown: false, header: () => <NavBarQuizzes /> }} />
+            <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Home', headerShown: false }} />
+            <Stack.Screen name="Jogar" component={JogarScreen} options={{ title: 'Jogar', headerShown: false }} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </AppContext.Provider>
     </ThemeProvider >
   )
 }

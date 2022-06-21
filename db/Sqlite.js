@@ -11,12 +11,31 @@ export default class Sqlite {
     // Executando transaction da DDL do banco
     return new Promise((resolve, reject) => {
       db.transaction(tx => {
+        tx.executeSql(`create table if not exists Pais (
+        id int primary key not null,
+        sigla text,
+        nome text
+      )`)
+
+      }, reject, resolve)
+      db.transaction(tx => {
         tx.executeSql(`create table if not exists Estados (
+        id int primary key not null,
+        idRegiao int,
+        idPais,
+        sigla text,
+        nome text,
+        foreign key (idPais) references Pais (id) on delete cascade on update no action
+      )`)
+      }, reject, resolve)
+
+      db.transaction(tx => {
+        tx.executeSql(`create table if not exists Cidades (
         id int primary key not null,
         idEstado int,
         idRegiao int,
-        sigla text,
-        nome text
+        nome text,
+        foreign key (idEstado) references Pais (id) on delete cascade on update no action
       )`)
       }, reject, resolve)
 

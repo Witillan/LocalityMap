@@ -5,7 +5,6 @@ export default class QuizzesDao {
 
     static Insert(value) {
         return new Promise((resolve, reject) => {
-            debugger
             const db = Sqlite.getDb()
 
             db.transaction(tx => {

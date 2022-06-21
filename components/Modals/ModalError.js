@@ -9,7 +9,7 @@ export default function ({ value, onClose, title, message }) {
     return (
         <View>
             <Modal
-                animationType="slide"
+                animationType="none"
                 transparent={true}
                 visible={value}
                 onRequestClose={() => {

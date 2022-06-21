@@ -4,7 +4,6 @@ export default class UserDao {
 
     static Insert(value) {
         return new Promise((resolve, reject) => {
-            debugger
             const db = Sqlite.getDb()
 
             db.transaction(tx => {

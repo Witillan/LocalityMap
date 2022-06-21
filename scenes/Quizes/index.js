@@ -1,22 +1,29 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import React, { useCallback, useEffect, useState } from 'react';
-import { FlatList, SafeAreaView, StyleSheet, Text, View, ImageBackground, TouchableOpacity } from 'react-native';
+import { FlatList, ImageBackground, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import Fundo from '../../assets/FundoTelaUser.png';
-import QuizzesDao from '../../db/QuizzesDao'
+import ModalLoading from '../../components/Modals/ModalLoading';
+import QuizzesDao from '../../db/QuizzesDao';
+import { CidadeService } from '../../Services/cidade';
+import { EstadoService } from '../../Services/estado';
+import { PaisService } from '../../Services/pais';
 
 export default function Quizzes() {
     const navigation = useNavigation()
+    const [loading, setLoading] = useState(false)
+    const [message, setMessage] = useState("")
 
     const [refreshing, setRefreshing] = useState(false)
     const [listQuizzes, setListQuizzes] = useState([])
     const [modalError, setModalError] = useState(false)
+    const [buscarNaApi, setBuscarNaApi] = useState(false)
 
     const Item = ({ item }) => {
         return (
-            <TouchableOpacity style={{ padding: 20, backgroundColor: '#DDDDDD33', borderRadius: 10 }}>
-                <Text>{item.nome || '---'}</Text>
+            <TouchableOpacity style={{ padding: 20, backgroundColor: '#DDDDDD33', borderRadius: 10 }} onPress={() => navigation.navigate("Jogar")}>
+                <Text style={{ fontSize: 20, color: '#FFFFFFCC' }}>{item.nome || '---'}</Text>
                 <Text>{item.descricao || '---'}</Text>
             </TouchableOpacity>
         )
@@ -25,6 +32,39 @@ export default function Quizzes() {
     const renderItem = ({ item }) => (
         <Item item={item} />
     )
+
+    const buscarPaises = async () => {
+        await PaisService.Obter().finally(() => {
+            setTimeout(() => {
+                buscarEstados()
+                setMessage("Buscando Estados")
+            }, 10000)
+        })
+    }
+
+    const buscarEstados = async () => {
+        await EstadoService.Obter().finally(() => {
+            setTimeout(() => {
+                buscarCidades()
+                setMessage("Buscando Cidades")
+            }, 10000)
+        })
+
+    }
+
+    const buscarCidades = async () => {
+        await CidadeService.Obter().finally(() => {
+            setTimeout(() => {
+                setLoading(false)
+            }, 10000)
+        })
+    }
+
+    useEffect(() => {
+        setLoading(true)
+        setMessage("Buscando Paises")
+        buscarPaises()
+    }, [])
 
     useEffect(() => {
         let inseriu = 'false'
@@ -76,6 +116,18 @@ export default function Quizzes() {
                     )}
                 />
             </ImageBackground>
+            <ModalLoading
+                loading={loading}
+                message={message}
+            />
+            <ModalLoading
+                loading={loading}
+                message={message}
+            />
+            <ModalLoading
+                loading={loading}
+                message={message}
+            />
         </SafeAreaView>
     )
 }
