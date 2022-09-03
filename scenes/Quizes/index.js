@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-import React, { useCallback, useEffect, useState } from 'react';
-import { FlatList, ImageBackground, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import Fundo from '../../assets/FundoTelaUser.png';
 import ModalLoading from '../../components/Modals/ModalLoading';
@@ -101,7 +101,7 @@ export default function Quizzes() {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <ImageBackground source={Fundo} style={{ flex: 1, padding: 10 }}>
+            <View style={{ flex: 1, padding: 10, backgroundColor: '#2B44FF' }}>
                 <Text style={styles.titleTest}>QUIZZES</Text>
                 <FlatList
                     refreshing={refreshing}
@@ -115,7 +115,7 @@ export default function Quizzes() {
                         </View>
                     )}
                 />
-            </ImageBackground>
+            </View>
             <ModalLoading
                 loading={loading}
                 message={message}
