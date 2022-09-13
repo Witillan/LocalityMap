@@ -1,14 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Platform, SafeAreaView, ImageBackground } from 'react-native'
-import ModalJogar from '../../../components/Modals/ModalJogar'
-import ModalLoading from '../../../components/Modals/ModalLoading'
-import CidadesDao from '../../../db/CidadeDao'
-import EstadosDao from '../../../db/EstadoDao'
-import Fundo from '../../../assets/FundoTelaUser.png'
-import AlertButtons from '../../../components/Modals/AlertButtons'
-import { AppContext } from '../../../App'
+import ModalJogar from '../../../../components/Modals/ModalJogar'
+import ModalLoading from '../../../../components/Modals/ModalLoading'
+import CidadesDao from '../../../../db/CidadeDao'
+import EstadosDao from '../../../../db/EstadoDao'
+import Fundo from '../../../../assets/FundoTelaUser.png'
+import AlertButtons from '../../../../components/Modals/AlertButtons'
+import { AppContext } from '../../../../App'
 
-export default function Jogar() {
+export default function QuizzMalhasEstados() {
     const [loading, setLoading] = useState(true)
     const [abrirButtons, setAbrirButtons] = useState(false)
     const [iniciar, setIniciar] = useState(false)

@@ -22,7 +22,20 @@ export default function Quizzes() {
 
     const Item = ({ item }) => {
         return (
-            <TouchableOpacity style={{ padding: 20, backgroundColor: '#DDDDDD33', borderRadius: 10 }} onPress={() => navigation.navigate("Jogar")}>
+            <TouchableOpacity style={{ padding: 20, backgroundColor: '#DDDDDD33', borderRadius: 10 }} onPress={() => {
+                switch (item.numQuizz) {
+                    case 1:
+                        navigation.navigate("QuizzCidades")
+                        break;
+                    case 2:
+                        navigation.navigate("QuizzMalhasEstados")
+                        break;
+                
+                    default:
+                        navigation.navigate("Quizzes")
+                        break;
+                }
+            }}>
                 <Text style={{ fontSize: 20, color: '#FFFFFFCC' }}>{item.nome || '---'}</Text>
                 <Text>{item.descricao || '---'}</Text>
             </TouchableOpacity>
@@ -85,6 +98,13 @@ export default function Quizzes() {
                     numQuizz: 1,
                     nome: "Quizz Cidades",
                     descricao: "Neste quizz você precisa descobrir quais são as cidades pertencentes ao estado escolhido."
+                })
+                    .catch((e) => alert(e))
+                await QuizzesDao.Insert({
+                    id: 1,
+                    numQuizz: 2,
+                    nome: "Quizz Malhas Geográficas",
+                    descricao: "Neste quizz você precisa descobrir qual o estado apartir do produto cartográfico."
                 })
                     .catch((e) => alert(e))
             }

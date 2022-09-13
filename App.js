@@ -11,7 +11,7 @@ import QuizzesScreen from './scenes/Quizes';
 import NavBarQuizzes from './scenes/Quizes/NavBar';
 import HomeScreen from './scenes/Home';
 import NomeUserScreen from './scenes/NomeUser/GetNomeUser';
-import JogarScreen from './scenes/Quizes/Jogar';
+import QuizzCidadesScreen from './scenes/Quizes/Jogar/QuizzCidades';
 // import SplashScreen from './scenes/Splash';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
@@ -35,7 +35,8 @@ function AppSplash() {
             {/* <Stack.Screen name="Splash" component={SplashScreen} options={{ title: 'Splash', headerShown: false }} /> */}
             <Stack.Screen name="Quizzes" component={QuizzesScreen} options={{ title: 'Quizzes', headerShown: false, header: () => <NavBarQuizzes /> }} />
             <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Home', headerShown: false }} />
-            <Stack.Screen name="Jogar" component={JogarScreen} options={{ title: 'Jogar', headerShown: false }} />
+            <Stack.Screen name="QuizzCidades" component={QuizzCidadesScreen} options={{ title: 'QuizzCidades', headerShown: false }} />
+            <Stack.Screen name="QuizzMalhasEstados" component={QuizzCidadesScreen} options={{ title: 'QuizzMalhasEstados', headerShown: false }} />
           </Stack.Navigator>
         </NavigationContainer>
       </AppContext.Provider>
